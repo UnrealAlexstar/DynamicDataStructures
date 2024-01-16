@@ -124,7 +124,6 @@ T& List<T>::operator[](const int index)
 	}
 	
 	cerr << "Error: wrong index";
-
 }
 
 template<typename T>
@@ -143,6 +142,44 @@ void List<T>::push_front(T data)
 	size++;
 }
 
+template<typename T>
+void List<T>::insert(T data, int index)
+{
+	if (head == nullptr || index <= 0) // 0 элементов или индекс <= 0
+	{
+		push_front(data);										
+	}
+	else if (head->pNext == nullptr || index > size)   // 1 элемент или индекс больше размера списка 
+	{
+		push_back(data);										
+	}
+	else // между 2-мя элементами
+	{
+		Node<T>* current = head; 
+		Node<T>* left;
+		Node<T>* right;
+
+		for (int i = 0; i < index - 1; i++)
+		{
+			current = current->pNext;
+		}
+		
+		left = current;
+		right = current->pNext; 
+
+		current = new Node<T>(data);
+		left->pNext = current;
+		current->pNext = right;
+
+		size++;
+
+	}
+
+
+}
+	
+
+
 int main()
 {
 	cout << "Enter the dynamic data structure you want to work with:\n"
@@ -159,20 +196,26 @@ int main()
 	lst.push_back(10);
 	lst.push_back(15);
 	lst.push_back(20);
-	lst.push_front(100);
-	lst.push_front(200);
+	//lst.push_front(100);
+	//lst.push_front(200);
 
-	lst.push_back(30);
-	lst.push_back(40);
+	//lst.push_back(30);
+	//lst.push_back(40);
 
-	lst.push_front(300);
-	lst.push_front(400);
+	//lst.push_front(300);
+	//lst.push_front(400);
+
+	
+	lst.insert(999, 2);
+	
 
 	for (int i = 0; i < lst.get_size(); i++)
 	{
 		cout << lst[i] << endl;
 	}
 	
+	
+
 	/*cout << "\nNow pop_front\n\n";
 	lst.pop_front();
 	
