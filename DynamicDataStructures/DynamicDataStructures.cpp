@@ -123,7 +123,7 @@ T& List<T>::operator[](const int index)
 		}
 	}
 	
-	cerr << "Error: wrong index";
+	cerr << "Error: wrong index"; 
 }
 
 template<typename T>
@@ -172,11 +172,81 @@ void List<T>::insert(T data, int index)
 		current->pNext = right;
 
 		size++;
+	}
+}
 
+template<typename T>
+void List<T>::removeAt(int index)
+{
+	if (index >= size)
+	{
+		index = size;
+		pop_back();
+		return;
 	}
 
+	if (head == nullptr)
+	{
+		cout << "List is empty";
+		return;
+	}
+	else if (head->pNext == nullptr || index <= 0)
+	{
+		pop_front();
+	}
+	else
+	{
+		Node<T>* current = head;
+		Node<T>* left;
+		Node<T>* right;
+
+		for (int i = 0; i < index - 1 ; i++)
+		{
+			current = current->pNext;
+		}
+		left = current; 
+		right = current->pNext->pNext;
+
+		delete current->pNext;
+		left->pNext = right; // связываем левый и правый элемент
+		size--; 
+	}
 
 }
+
+template<typename T>
+void List<T>::pop_back()
+{
+	int k = 0;
+	if (head == nullptr)
+	{
+		cout << "List is empty\n";
+		return;
+	}
+	else if (head->pNext == nullptr)
+	{
+		clear();
+	}
+	else
+	{
+		Node<T>* current = head;
+		Node<T>* left = head;
+		while (current->pNext != nullptr)
+		{
+			left = current;
+			current = current->pNext;
+			/*cout << "iteration: " << k++ << endl;
+			cout << "left: " << left->data << endl;
+			cout << "current: " << current->data << endl;*/
+
+		}
+		left->pNext = nullptr;
+		delete current;
+		size--;
+	}
+	
+}
+
 	
 
 
@@ -194,8 +264,8 @@ int main()
 	List<int> lst;
 	lst.push_back(5);
 	lst.push_back(10);
-	lst.push_back(15);
-	lst.push_back(20);
+	//lst.push_back(15);
+	//lst.push_back(20);
 	//lst.push_front(100);
 	//lst.push_front(200);
 
@@ -207,12 +277,19 @@ int main()
 
 	
 	lst.insert(999, 2);
-	
-
-	for (int i = 0; i < lst.get_size(); i++)
+	while (true)
 	{
-		cout << lst[i] << endl;
+		for (int i = 0; i < lst.get_size(); i++)
+		{
+			cout <<"Element #"<<i<<" = "<< lst[i] << endl;
+		}
+		int n;
+		cout << "Input the num of elem to remove:\n";
+		cin >> n;
+		lst.removeAt(n);
 	}
+
+	
 	
 	
 
