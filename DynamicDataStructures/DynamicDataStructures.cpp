@@ -7,6 +7,7 @@ using namespace std;
 // интерфейс для всех типов для print и add добавить ? получится ли. Лучше не стоит наверное
 
 // структуры в различных файлах 
+enum Struct_Name { List = 1, DoubledLinkedList, Binary_Tree, Stack, Queue, Priority_queue, Qeque};
 
 template<typename T>
 class List
@@ -149,27 +150,24 @@ void List<T>::insert(T data, int index)
 	{
 		push_front(data);										
 	}
-	else if (head->pNext == nullptr || index > size)   // 1 элемент или индекс больше размера списка 
+	else if (index > size)   // 1 элемент или индекс больше размера списка 
 	{
 		push_back(data);										
 	}
 	else // между 2-мя элементами
 	{
-		Node<T>* current = head; 
-		Node<T>* left;
+		 
+		Node<T>* left = head;
 		Node<T>* right;
 
 		for (int i = 0; i < index - 1; i++)
 		{
-			current = current->pNext;
+			left = left->pNext;
 		}
-		
-		left = current;
-		right = current->pNext; 
+		right = left->pNext; 
 
-		current = new Node<T>(data);
+		Node<T>* current = new Node<T>(data, right); // сразу же текущий указывает на  right
 		left->pNext = current;
-		current->pNext = right;
 
 		size++;
 	}
@@ -188,26 +186,24 @@ void List<T>::removeAt(int index)
 	if (head == nullptr)
 	{
 		cout << "List is empty";
-		return;
 	}
-	else if (head->pNext == nullptr || index <= 0)
+	else if (index <= 0)
 	{
 		pop_front();
 	}
 	else
 	{
-		Node<T>* current = head;
-		Node<T>* left;
+		Node<T>* current;
+		Node<T>* left = head;
 		Node<T>* right;
 
 		for (int i = 0; i < index - 1 ; i++)
 		{
-			current = current->pNext;
+			left = left->pNext;
 		}
-		left = current; 
-		right = current->pNext->pNext;
+		right = left->pNext->pNext;
 
-		delete current->pNext;
+		delete left->pNext;
 		left->pNext = right; // связываем левый и правый элемент
 		size--; 
 	}
@@ -235,10 +231,6 @@ void List<T>::pop_back()
 		{
 			left = current;
 			current = current->pNext;
-			/*cout << "iteration: " << k++ << endl;
-			cout << "left: " << left->data << endl;
-			cout << "current: " << current->data << endl;*/
-
 		}
 		left->pNext = nullptr;
 		delete current;
@@ -259,9 +251,12 @@ int main()
 		"4 - Stack\n"
 		"5 - Queue\n"
 		"6 - Priority queue\n"
-		"7 - Deque (double-ended queue)\n \n";
+		"7 - Deque (double-ended queue)\n \n"; //Дэк, двусторонняя очередь
 	
 	List<int> lst;
+	lst.insert(999, 2);
+	lst.insert(999, 2);
+	lst.insert(999, 2);
 	lst.push_back(5);
 	lst.push_back(10);
 	//lst.push_back(15);
@@ -277,6 +272,7 @@ int main()
 
 	
 	lst.insert(999, 2);
+
 	while (true)
 	{
 		for (int i = 0; i < lst.get_size(); i++)
